@@ -22,6 +22,7 @@ import {
   BarChart3,
   Map as MapIcon
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import 'leaflet/dist/leaflet.css';
 import './style.scss';
 
@@ -101,6 +102,7 @@ const MapPanel: React.FC<MapPanelProps> = ({
   selectedDrone,
   swarmCount
 }) => {
+  const { t } = useTranslation();
   const mapCenter: [number, number] = [41.2995, 69.2401];
   const isAnyFlying = activeMissions.some(m => m.status === 'FLYING');
 
@@ -109,14 +111,14 @@ const MapPanel: React.FC<MapPanelProps> = ({
       <div className="map-header mono">
         <div className="h-left">
           <Layers size={14} />
-          <span className="title">DIHA Xaritasi v3.4.5</span>
+          <span className="title">{t('map.title')}</span>
         </div>
         <div className="h-center">
-          <span className="stat">{activeMissions.length} FAOL MISSYA</span>
+          <span className="stat">{activeMissions.length} {t('map.activeMissions')}</span>
           <span className="stat">{selectedDrone.toUpperCase()}</span>
         </div>
         <div className="h-right">
-          <span className="src-badge">SATELLIT ▾</span>
+          <span className="src-badge">{t('map.satellite')}</span>
           <Settings size={14} className="icon" />
           {onClose && <X size={18} className="icon close-btn" onClick={onClose} />}
         </div>
@@ -185,7 +187,7 @@ const MapPanel: React.FC<MapPanelProps> = ({
                  {/* Target Marker */}
                  <Marker position={[mission.target.lat, mission.target.lng]} icon={createDotIcon('#fbbf24')}>
                     <Tooltip direction="top" className="tactical-tooltip">
-                       <span>MISSYA: {mission.id}</span>
+                       <span>{t('map.mission')}: {mission.id}</span>
                     </Tooltip>
                  </Marker>
 
@@ -218,16 +220,16 @@ const MapPanel: React.FC<MapPanelProps> = ({
               className={`btn green`}
               onClick={() => {
                 if (targets.length > 0) {
-                  startFlight(targets.map(t => ({ lat: t.lat, lng: t.lng })));
+                  startFlight(targets.map(tItem => ({ lat: tItem.lat, lng: tItem.lng })));
                 }
               }}
               style={{ width: 'auto', padding: '0 20px', fontWeight: 'bold' }}
             >
-              YANGI MISSYA BOSHLASH
+              {t('map.startNewMission')}
             </div>
           </div>
           <div className="coord-footer">
-            {activeMissions.length} AKTIV SQUADRONS | {targets.length} BELGILANGAN NISHON
+            {activeMissions.length} {t('map.activeSquadrons')} | {targets.length} {t('map.designatedTarget')}
           </div>
         </div>
 

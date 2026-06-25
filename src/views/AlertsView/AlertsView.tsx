@@ -1,7 +1,9 @@
 import React from 'react';
 import { AlertCircle, ShieldAlert, Zap } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const AlertsView: React.FC = () => {
+  const { t } = useTranslation();
   const alerts = [
     { id: 1, type: 'CRITICAL', msg: 'RUXSATSIZ KUZATUV ANIQLANDI', time: '10:24:12' },
     { id: 2, type: 'WARNING', msg: 'BATARYA QUVVATI PAST (15%)', time: '10:20:05' },
@@ -10,7 +12,7 @@ const AlertsView: React.FC = () => {
 
   return (
     <div className="view-placeholder alerts-view">
-      <h1>XAVFSIZLIK VA OGOHLANTIRISHLAR</h1>
+      <h1>{t('views.alerts.title')}</h1>
       <div className="alerts-list" style={{ width: '100%', maxWidth: '800px', marginTop: '30px' }}>
         {alerts.map(a => (
           <div key={a.id} className={`alert-item ${a.type.toLowerCase()}`} style={{ 

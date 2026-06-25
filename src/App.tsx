@@ -14,6 +14,7 @@ import MapPanel from './components/MapPanel/MapPanel';
 import { useSimulation } from './hooks/useSimulation';
 import './index.css';
 import { Target } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface ActiveMission {
   id: string;
@@ -29,6 +30,7 @@ interface ActiveMission {
 }
 
 const App: React.FC = () => {
+  const { t } = useTranslation();
   const [activeMissions, setActiveMissions] = useState<ActiveMission[]>([]);
   const [activeTab, setActiveTab] = useState('drone');
   const [targets, setTargets] = useState<any[]>([]);
@@ -117,7 +119,7 @@ const App: React.FC = () => {
       droneId: selectedDrone,
       swarmCount: swarmCount,
       target: waypoints[0],
-      targetAddress: targets[0]?.address || 'Nomaʼlum hudud',
+      targetAddress: targets[0]?.address || t('app.unknownArea'),
       currentPos: { lat: 41.2995, lng: 69.2401 },
       status: 'FLYING',
       timer: 0,
@@ -139,17 +141,17 @@ const App: React.FC = () => {
   };
 
   const handleAddTarget = async (lat: number, lng: number) => {
-    let address = 'Aniqlanmoqda...';
+    let address = t('app.detecting');
 
     const newId = Date.now();
     const newTarget = {
       id: newId,
       lat,
       lng,
-      label: `NISHON`,
+      label: t('app.target'),
       time: new Date().toLocaleTimeString(),
       address,
-      status: 'Faol'
+      status: t('app.active')
     };
 
     // Set as the ONLY target
@@ -158,11 +160,11 @@ const App: React.FC = () => {
     try {
       const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
       const data = await response.json();
-      const addressName = data.display_name || 'Nomaʼlum hudud';
+      const addressName = data.display_name || t('app.unknownArea');
 
-      setTargets(prev => prev.map(t => t.id === newId ? { ...t, address: addressName } : t));
+      setTargets(prev => prev.map(tItem => tItem.id === newId ? { ...tItem, address: addressName } : tItem));
     } catch (error) {
-      setTargets(prev => prev.map(t => t.id === newId ? { ...t, address: 'Xatolik (Tarmoq)' } : t));
+      setTargets(prev => prev.map(tItem => tItem.id === newId ? { ...tItem, address: t('app.errorNetwork') } : tItem));
     }
   };
 
@@ -213,17 +215,17 @@ const App: React.FC = () => {
                 {completionAlerts.map((alert) => (
                   <div key={alert.id} className="alert-content">
                     <div className="icon"><Target size={48} color="#ef4444" /></div>
-                    <h2 style={{ color: '#fbbf24' }}>NISHON YO'Q QILINDI</h2>
+                    <h2 style={{ color: '#fbbf24' }}>{t('app.targetDestroyed')}</h2>
                     <div className="mission-details mono" style={{ marginBottom: '15px', color: '#fff', fontSize: '0.9rem' }}>
                       <p style={{ color: '#22c55e', fontWeight: 'bold' }}>{alert.address}</p>
                       <p>LAT: {alert.lat.toFixed(6)} | LNG: {alert.lng.toFixed(6)}</p>
                     </div>
-                    <p>{alert.count} ta drondan {alert.count} tasi nishonga borib tegdi va nishon muvaffaqiyatli yo'q qilindi.</p>
+                    <p>{t('app.dronesHit', { count: alert.count })}</p>
                     <button className="reset-btn" onClick={() => {
                        handleResetMission(alert.id);
                        setCompletionAlerts(prev => prev.filter(a => a.id !== alert.id));
                        if (completionAlerts.length === 1) setActiveTab('dots');
-                    }}>TASDIQLASH (OK)</button>
+                    }}>{t('app.confirmOk')}</button>
                   </div>
                 ))}
               </div>
@@ -259,8 +261,8 @@ const App: React.FC = () => {
       default:
         return (
           <div className="view-placeholder">
-            <h1>{activeTab.toUpperCase()} PAGE</h1>
-            <p>Ushbu sahifa hozirda ishlab chiqilmoqda...</p>
+            <h1>{activeTab.toUpperCase()} {t('app.page')}</h1>
+            <p>{t('app.underConstruction')}</p>
           </div>
         );
     }

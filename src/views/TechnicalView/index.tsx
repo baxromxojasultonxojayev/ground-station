@@ -15,6 +15,7 @@ import {
   Shield,
   Gauge
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import './style.scss';
 
 interface TechnicalViewProps {
@@ -187,20 +188,21 @@ const DroneModel = ({ roll, pitch, selectedDrone }: { roll: number, pitch: numbe
 };
 
 const TechnicalView: React.FC<TechnicalViewProps> = ({ data, selectedDrone }) => {
+  const { t } = useTranslation();
   return (
     <div className="technical-view-container tactical-3d mono">
       <div className="tech-header-v2">
         <div className="left-meta">
-          <div className="badge primary">DIHA TIZIMI v4.0</div>
-          <div className="badge success">ALOQA FAOL</div>
-          <div className="lat-lng">TIZIM: OK | GNSS: 12 SAT | SIG: -64 dBm</div>
+          <div className="badge primary">{t('views.technical.systemTitle')}</div>
+          <div className="badge success">{t('views.technical.connActive')}</div>
+          <div className="lat-lng">{t('views.technical.sysOk')}</div>
         </div>
         <div className="center-meta">
-          <div className="mission-timer">MISSYA VAQTI: {data.timer.toFixed(1)}s</div>
+          <div className="mission-timer">{t('views.technical.missionTime', { time: data.timer.toFixed(1) })}</div>
           <div className="date-display">2024.03.07 16:21:51</div>
         </div>
         <div className="right-meta">
-          <div className="badge warn">AVTONOM REJIM</div>
+          <div className="badge warn">{t('views.technical.autoMode')}</div>
           <div className="system-time">{data.systemTime}</div>
         </div>
       </div>
@@ -209,18 +211,18 @@ const TechnicalView: React.FC<TechnicalViewProps> = ({ data, selectedDrone }) =>
         {/* Left Side: System & Power */}
         <div className="side-panel left">
           <div className="panel-item">
-            <div className="header"><Zap size={14} /> QUVVAT BOSHQARUVI</div>
+            <div className="header"><Zap size={14} /> {t('views.technical.powerManagement')}</div>
             <div className="grid-stats">
-              <div className="stat"><span>KUCHLANISH</span> 24.8V</div>
-              <div className="stat"><span>TOK KUCHI</span> 12.4A</div>
-              <div className="stat"><span>QUVVAT</span> 307Vt</div>
-              <div className="stat"><span>QOLDIQ</span> 86%</div>
+              <div className="stat"><span>{t('views.technical.voltage')}</span> 24.8V</div>
+              <div className="stat"><span>{t('views.technical.current')}</span> 12.4A</div>
+              <div className="stat"><span>{t('views.technical.power')}</span> 307Vt</div>
+              <div className="stat"><span>{t('views.technical.remain')}</span> 86%</div>
             </div>
             <div className="power-bar"><div className="fill" style={{ width: '86%' }}></div></div>
           </div>
 
           <div className="panel-item">
-            <div className="header"><Cpu size={14} /> PARVOZ NAZORATCHISI</div>
+            <div className="header"><Cpu size={14} /> {t('views.technical.flightController')}</div>
             <div className="esc-grid">
               <div className="esc-node active">M1: 34°C</div>
               <div className="esc-node active">M2: 36°C</div>
@@ -228,7 +230,7 @@ const TechnicalView: React.FC<TechnicalViewProps> = ({ data, selectedDrone }) =>
               <div className="esc-node active">M4: 35°C</div>
             </div>
             <div className="cpu-load">
-              <span>CPU YUKLAMASI</span>
+              <span>{t('views.technical.cpuLoad')}</span>
               <div className="load-dots">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <div key={i} className={`dot ${i < 4 ? 'active' : ''}`}></div>)}
               </div>
@@ -236,13 +238,13 @@ const TechnicalView: React.FC<TechnicalViewProps> = ({ data, selectedDrone }) =>
           </div>
 
           <div className="panel-item">
-            <div className="header"><Shield size={14} /> AVIONIKA VA SENSORLAR</div>
+            <div className="header"><Shield size={14} /> {t('views.technical.avionics')}</div>
             <div className="sensor-list">
-              <div className="s-item"><span>IMU-A (ASOSIY)</span> <span className="val green">OK</span></div>
-              <div className="s-item"><span>IMU-B (ZAXIRA)</span> <span className="val green">OK</span></div>
-              <div className="s-item"><span>BAROMETR</span> <span className="val green">1013 hPa</span></div>
-              <div className="s-item"><span>MAGNETOMETR</span> <span className="val yellow">SOZLANMOQDA</span></div>
-              <div className="s-item"><span>GPS ANIQLIGI</span> <span className="val green">0.8m</span></div>
+              <div className="s-item"><span>{t('views.technical.imuMain')}</span> <span className="val green">OK</span></div>
+              <div className="s-item"><span>{t('views.technical.imuBackup')}</span> <span className="val green">OK</span></div>
+              <div className="s-item"><span>{t('views.technical.barometer')}</span> <span className="val green">1013 hPa</span></div>
+              <div className="s-item"><span>{t('views.technical.magnetometer')}</span> <span className="val yellow">{t('views.technical.tuning')}</span></div>
+              <div className="s-item"><span>{t('views.technical.gpsAcc')}</span> <span className="val green">0.8m</span></div>
             </div>
           </div>
         </div>
@@ -250,14 +252,14 @@ const TechnicalView: React.FC<TechnicalViewProps> = ({ data, selectedDrone }) =>
         {/* Center: 3D Visualization */}
         <div className="viewport-3d">
           <div className="canvas-overlay top-left">
-            <div className="v-label">TAKTIK SXEMA</div>
+            <div className="v-label">{t('views.technical.tacticalScheme')}</div>
             <div className="v-sub">MODEL ID: DIHA-P1-ALPHA</div>
           </div>
 
           <div className="canvas-overlay top-right">
             <div className="coord-box">
-              <div className="c-item">KENGLIK: {data.coords.b.toFixed(6)}</div>
-              <div className="c-item">UZUNLIK: {data.coords.e.toFixed(6)}</div>
+              <div className="c-item">{t('views.technical.lat')}: {data.coords.b.toFixed(6)}</div>
+              <div className="c-item">{t('views.technical.lng')}: {data.coords.e.toFixed(6)}</div>
             </div>
           </div>
 
@@ -288,7 +290,7 @@ const TechnicalView: React.FC<TechnicalViewProps> = ({ data, selectedDrone }) =>
 
           <div className="canvas-overlay bottom-right">
             <div className="v-speed-gauge">
-              <div className="g-label">V.TEZLIK</div>
+              <div className="g-label">{t('footer.vspeed')}</div>
               <div className="g-bar">
                 <div className="fill" style={{ height: '50%', transform: `scaleY(${Math.min(Math.abs(data.vSpeed) / 1000, 1)})`, transformOrigin: data.vSpeed > 0 ? 'bottom' : 'top' }}></div>
               </div>
@@ -300,44 +302,44 @@ const TechnicalView: React.FC<TechnicalViewProps> = ({ data, selectedDrone }) =>
         {/* Right Side: Mission & Environment */}
         <div className="side-panel right">
           <div className="panel-item">
-            <div className="header"><Gauge size={14} /> DVIGATEL TIZIMI</div>
+            <div className="header"><Gauge size={14} /> {t('views.technical.engineSystem')}</div>
             <div className="prop-display">
               <div className="rpm-box">
-                <div className="label">DVIGATEL RPM</div>
+                <div className="label">{t('views.technical.engineRpm')}</div>
                 <div className="val">{data.rpm}</div>
-                <div className="unit">AYL/MIN</div>
+                <div className="unit">{t('views.technical.rpmUnit')}</div>
               </div>
               <div className="thrust-bar">
-                <div className="label">TORTISH KUCHI</div>
+                <div className="label">{t('views.technical.thrust')}</div>
                 <div className="bar-outer"><div className="bar-inner" style={{ width: '74%' }}></div></div>
               </div>
             </div>
           </div>
 
           <div className="panel-item">
-            <div className="header"><Navigation2 size={14} /> MISSIYA HOLATI</div>
+            <div className="header"><Navigation2 size={14} /> {t('views.technical.missionStatus')}</div>
             <div className="mission-info">
-              <div className="info-row"><span>HOLAT</span> <span className="val blue">{data.isFlying ? 'PARVOZDA' : 'KUTISHDA'}</span></div>
-              <div className="info-row"><span>NUQTALAR</span> <span className="val">04 / 12</span></div>
-              <div className="info-row"><span>MASOFA</span> <span className="val">2.4 km</span></div>
-              <div className="info-row"><span>VAQT (ETA)</span> <span className="val">08:12</span></div>
+              <div className="info-row"><span>{t('footer.status')}</span> <span className="val blue">{data.isFlying ? t('views.technical.statusInFlight') : t('views.technical.statusWait')}</span></div>
+              <div className="info-row"><span>{t('views.technical.points')}</span> <span className="val">04 / 12</span></div>
+              <div className="info-row"><span>{t('views.technical.distance')}</span> <span className="val">2.4 km</span></div>
+              <div className="info-row"><span>{t('views.technical.timeEta')}</span> <span className="val">08:12</span></div>
             </div>
           </div>
 
           <div className="panel-item">
-            <div className="header"><Thermometer size={14} /> ATROF-MUHIT</div>
+            <div className="header"><Thermometer size={14} /> {t('views.technical.environment')}</div>
             <div className="env-grid">
-              <div className="env-item"><span>HARORAT</span> 18°C</div>
-              <div className="env-item"><span>SHAMOL</span> 4.2 m/s</div>
-              <div className="env-item"><span>NAMLIK</span> 42%</div>
-              <div className="env-item"><span>BOSIM</span> 1013 hPa</div>
+              <div className="env-item"><span>{t('views.technical.temperature')}</span> 18°C</div>
+              <div className="env-item"><span>{t('views.technical.wind')}</span> 4.2 m/s</div>
+              <div className="env-item"><span>{t('views.technical.humidity')}</span> 42%</div>
+              <div className="env-item"><span>{t('views.technical.pressure')}</span> 1013 hPa</div>
             </div>
           </div>
 
           <div className="panel-item">
-            <div className="header"><Signal size={14} /> ALOQA KANALI</div>
+            <div className="header"><Signal size={14} /> {t('views.technical.commChannel')}</div>
             <div className="signal-quality">
-              <div className="s-label">SIGNAL SIFATI</div>
+              <div className="s-label">{t('footer.signalQuality')}</div>
               <div className="s-bars">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => <div key={i} className={`s-bar ${i < 8 ? 'active' : ''}`}></div>)}
               </div>
@@ -346,36 +348,36 @@ const TechnicalView: React.FC<TechnicalViewProps> = ({ data, selectedDrone }) =>
           </div>
 
           <div className="action-buttons">
-            <button className="tactical-btn">AVIONIKANI QAYTA YUKLASH</button>
-            <button className="tactical-btn warn">RTL (UYGA QAYTISH)</button>
+            <button className="tactical-btn">{t('views.technical.rebootAvionics')}</button>
+            <button className="tactical-btn warn">{t('views.technical.rtl')}</button>
           </div>
         </div>
       </div>
 
       <div className="tech-footer-v3">
         <div className="footer-stat main">
-          <div className="label">HAVO TEZLIGI</div>
+          <div className="label">{t('views.technical.airspeed')}</div>
           <div className="value">{data.airspeed.toFixed(1)} <span className="unit">m/s</span></div>
         </div>
         <div className="footer-stat">
-          <div className="label">BALANDLIK (MSL)</div>
+          <div className="label">{t('views.technical.altitudeMsl')}</div>
           <div className="value">{data.altitude} <span className="unit">ft</span></div>
         </div>
         <div className="footer-stat">
-          <div className="label">YO'NALISH (HEADING)</div>
+          <div className="label">{t('views.technical.heading')}</div>
           <div className="value">{data.heading.toFixed(0)}°</div>
         </div>
         <div className="footer-stat">
-          <div className="label">BATAREYA QUVVATI</div>
+          <div className="label">{t('views.technical.batteryPower')}</div>
           <div className="value">854 <span className="unit">Vt/s</span></div>
         </div>
         <div className="footer-stat">
-          <div className="label">G-KUCHI</div>
+          <div className="label">{t('views.technical.gForce')}</div>
           <div className="value">1.02 <span className="unit">G</span></div>
         </div>
         <div className="footer-logo">
-          <div className="logo-text">UAV BOSHQARUV MARKAZI</div>
-          <div className="logo-sub">XAVFSIZ ALOQA v4.2</div>
+          <div className="logo-text">{t('views.technical.uavCenter')}</div>
+          <div className="logo-sub">{t('views.technical.safeComm')}</div>
         </div>
       </div>
     </div>

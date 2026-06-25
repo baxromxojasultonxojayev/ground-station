@@ -13,6 +13,7 @@ import {
   Droplets,
   LineChart
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import './style.scss';
 
 interface TopBarProps {
@@ -20,13 +21,37 @@ interface TopBarProps {
 }
 
 const TopBar: React.FC<TopBarProps> = ({ data }) => {
+  const { t, i18n } = useTranslation();
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    i18n.changeLanguage(e.target.value);
+  };
+
   return (
     <div className="top-bar-refined mono">
       {/* Left Section */}
       <div className="header-left">
-        <div className="logo-section">
+        <div className="logo-section" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
           <span className="logo-text">ATRAK</span>
-          <span className="logo-sub">UZB</span>
+          <select 
+            className="lang-select" 
+            value={i18n.language} 
+            onChange={handleLanguageChange}
+            style={{ 
+              background: '#0f172a', 
+              color: '#3b82f6', 
+              border: '1px solid #334155', 
+              borderRadius: '4px',
+              padding: '2px 4px',
+              fontSize: '10px',
+              fontWeight: 'bold',
+              outline: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            <option value="uz">UZB</option>
+            <option value="tr">TÜRK</option>
+          </select>
         </div>
         <div className="nav-arrows">
           <div className="arrow"><ChevronLeft size={16} /></div>
@@ -34,22 +59,22 @@ const TopBar: React.FC<TopBarProps> = ({ data }) => {
         </div>
         <div className="status-icons">
           <div className="icon-circle">H</div>
-          <div className="icon-circle">UZ</div>
+          <div className="icon-circle">{i18n.language.toUpperCase()}</div>
         </div>
         <div className="mode-grid">
           <div className="mode-row">
-            <span className="indicator active-red">BAL</span>
-            <span className="indicator dimmed">TEZ</span>
-            <span className="indicator active-red">SIST</span>
-            <span className="indicator dimmed">GNSS</span>
-            <span className="indicator dimmed">SIGN</span>
+            <span className="indicator active-red">{t('topbar.alt')}</span>
+            <span className="indicator dimmed">{t('topbar.spd')}</span>
+            <span className="indicator active-red">{t('topbar.sys')}</span>
+            <span className="indicator dimmed">{t('topbar.gnss')}</span>
+            <span className="indicator dimmed">{t('topbar.sign')}</span>
           </div>
           <div className="mode-row">
-            <span className="indicator dimmed">ALOQ</span>
-            <span className="indicator dimmed">MOT</span>
-            <span className="indicator dimmed">YORD</span>
-            <span className="indicator dimmed">JOY</span>
-            <span className="indicator active-red">QO'L</span>
+            <span className="indicator dimmed">{t('topbar.com')}</span>
+            <span className="indicator dimmed">{t('topbar.eng')}</span>
+            <span className="indicator dimmed">{t('topbar.aux')}</span>
+            <span className="indicator dimmed">{t('topbar.loc')}</span>
+            <span className="indicator active-red">{t('topbar.man')}</span>
           </div>
         </div>
         <div className="special-indicators">
@@ -67,9 +92,9 @@ const TopBar: React.FC<TopBarProps> = ({ data }) => {
       {/* Center Section */}
       <div className="header-center">
         <div className="operation-modes">
-          <span className="op-mode active">AVTONOM</span>
-          <span className="op-mode active">YO'NALISH KUZATUV</span>
-          <span className="op-mode active">AYLANA</span>
+          <span className="op-mode active">{t('topbar.autonomous')}</span>
+          <span className="op-mode active">{t('topbar.routeTracking')}</span>
+          <span className="op-mode active">{t('topbar.circle')}</span>
         </div>
         <div className="bottom-mini-icons">
           <Settings size={12} /> <BarChart size={12} /> <BarChart3 size={12} /> <TrendingUp size={12} />

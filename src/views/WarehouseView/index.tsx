@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Package, Shield, Zap, Target, CheckCircle2, Rocket, MapPin, Navigation } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
+import { useTranslation } from 'react-i18next';
 import './style.scss';
 
 // Fix for default marker icons
@@ -106,6 +107,7 @@ const WarehouseView: React.FC<WarehouseViewProps> = ({
   swarmCount,
   onSwarmChange
 }) => {
+  const { t } = useTranslation();
   const showMap = swarmCount > 0;
 
   const handleLaunch = () => {
@@ -124,7 +126,7 @@ const WarehouseView: React.FC<WarehouseViewProps> = ({
           <div className="warehouse-header">
             <div className="title">
               <Package size={24} />
-              <h1>DRONLAR OMBORI</h1>
+              <h1>{t('warehouse.title')}</h1>
             </div>
           </div>
 
@@ -138,9 +140,9 @@ const WarehouseView: React.FC<WarehouseViewProps> = ({
                 }}
               >
                 <div className="card-header">
-                  <span className="type-badge">{drone.type}</span>
-                  <div className="stock-info">ZAXIRA: <b>{inventory[drone.id]}</b></div>
-                  {selectedDrone === drone.id && swarmCount > 0 && <div className="active-badge">{swarmCount} TA TANLANDI</div>}
+                  <span className="type-badge">{t(`warehouse.${drone.id}.type`)}</span>
+                  <div className="stock-info">{t('warehouse.stock')}: <b>{inventory[drone.id]}</b></div>
+                  {selectedDrone === drone.id && swarmCount > 0 && <div className="active-badge">{t('warehouse.selectedCount', { count: swarmCount })}</div>}
                 </div>
                 
                 <div className="drone-preview">
@@ -150,7 +152,7 @@ const WarehouseView: React.FC<WarehouseViewProps> = ({
 
                 <div className="card-body">
                   <h2>{drone.name}</h2>
-                  <p>{drone.description}</p>
+                  <p>{t(`warehouse.${drone.id}.desc`)}</p>
                   
                   {selectedDrone === drone.id && (
                     <div className="swarm-controls" onClick={e => e.stopPropagation()}>
@@ -177,7 +179,7 @@ const WarehouseView: React.FC<WarehouseViewProps> = ({
                 </div>
 
                 <button className={`select-btn ${selectedDrone === drone.id ? 'active' : ''}`}>
-                  {selectedDrone === drone.id ? 'TANLANGAN' : 'TANLASH'}
+                  {selectedDrone === drone.id ? t('warehouse.selected') : t('warehouse.select')}
                 </button>
               </div>
             ))}
@@ -187,8 +189,8 @@ const WarehouseView: React.FC<WarehouseViewProps> = ({
         {/* RIGHT: MISSION PLANNING MAP */}
         <div className={`mission-section ${showMap ? 'visible' : ''}`}>
            <div className="mission-header">
-              <div className="m-title"><Navigation size={20} /> MISSIYA REJALASHTIRISH</div>
-              <div className="m-sub">Xaritadan nishon kordinatasini belgilang</div>
+              <div className="m-title"><Navigation size={20} /> {t('warehouse.missionPlan')}</div>
+              <div className="m-sub">{t('warehouse.selectTargetCoord')}</div>
            </div>
            
            <div className="mini-map-container">
@@ -218,11 +220,11 @@ const WarehouseView: React.FC<WarehouseViewProps> = ({
            </div>
 
            <div className="mission-actions">
-              <div className="drone-info-mini">
+               <div className="drone-info-mini">
                  <img src={drones.find(d => d.id === selectedDrone)?.image} alt="" />
                  <div className="details">
                     <b>{drones.find(d => d.id === selectedDrone)?.name}</b>
-                    <span className="count-badge">{swarmCount} TA DRON</span>
+                    <span className="count-badge">{t('warehouse.droneCount', { count: swarmCount })}</span>
                  </div>
               </div>
               <button 
@@ -231,7 +233,7 @@ const WarehouseView: React.FC<WarehouseViewProps> = ({
                 disabled={targets.length === 0 || swarmCount === 0}
               >
                 <Rocket size={20} />
-                {swarmCount > 0 ? `${swarmCount} TA DRONNI UCHIRISH` : 'DRON TANLANMAGAN'}
+                {swarmCount > 0 ? t('warehouse.launchDrones', { count: swarmCount }) : t('warehouse.noDroneSelected')}
               </button>
            </div>
         </div>
